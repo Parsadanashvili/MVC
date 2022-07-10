@@ -1,0 +1,14 @@
+use Core\Database\Manager\DatabaseManager;
+
+class {id}_{name}
+{
+    public function up(DatabaseManager $database)
+    {
+        // $database->pdo->exec();
+    }
+
+    public function down(DatabaseManager $database)
+    {
+        // $database->pdo->exec();
+    }
+}
