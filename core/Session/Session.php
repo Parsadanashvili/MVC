@@ -2,7 +2,6 @@
 
 namespace Core\Session;
 
-use Core\Globals;
 use Core\Session\Exception\SessionException;
 use Core\Session\Storage\SessionStorageInterface;
 use Throwable;

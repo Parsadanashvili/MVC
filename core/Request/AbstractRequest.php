@@ -3,6 +3,7 @@
 namespace Core\Request;
 
 use Core\Request\ParameterBag;
+use Core\Session\Session;
 
 abstract class AbstractRequest
 {
@@ -63,5 +64,21 @@ abstract class AbstractRequest
     protected function getHeaders(): void
     {
         $this->headers = new ParameterBag(getallheaders() ?? []);
+    }
+
+    public static function storeOldInputs(array $inputs): void
+    {
+        Session::set('_old_inputs', $inputs);
+        Session::set('_remove_old_inputs', 0);
+    }
+
+    public static function clearOldInputs()
+    {
+        if(Session::has('_remove_old_inputs') && Session::get('_remove_old_inputs') == 1) {
+            Session::remove('_old_inputs');
+            Session::remove('_remove_old_inputs');
+        }
+
+        Session::set('_remove_old_inputs', 1);
     }
 }

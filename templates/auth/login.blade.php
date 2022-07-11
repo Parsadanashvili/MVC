@@ -4,8 +4,6 @@
     Login
 @endsection
 
-@use(\Core\Request\Request)
-
 @section('content')
     <div class="vh-100 d-flex justify-content-center align-items-center">
         <div class="container">
@@ -19,7 +17,7 @@
                                 
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email address</label>
-                                    <input type="text" class="form-control @if($errors->has('email')){{ 'is-invalid' }}@endif" id="email" name="email" placeholder="name@example.com" autocomplete="off">
+                                    <input type="text" class="form-control @if($errors->has('email')){{ 'is-invalid' }}@endif" id="email" name="email" value="{{ old('email') }}" placeholder="name@example.com" autocomplete="off">
 
                                     @if($errors->has('email'))
                                         <div class="invalid-feedback">

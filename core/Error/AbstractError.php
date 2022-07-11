@@ -18,7 +18,6 @@ abstract class AbstractError
      */
     public function __construct()
     {
-        $this->clear();
         $this->getErrors();
     }
 

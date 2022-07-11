@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use Core\Request\Request;
 use Core\Response\Response;
 use Core\Session\Session;
 
@@ -61,6 +62,7 @@ class Validator
         }
 
         if(count($this->errors) > 0) {
+            Request::storeOldInputs($this->request);
             Response::redirect(Session::get('_previous_url'), 302, $this->errors);
         }
 

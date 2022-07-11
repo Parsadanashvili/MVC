@@ -3,8 +3,12 @@
 namespace Core;
 
 use App\Models\User;
+use Core\Error\Error as Error;
+use Core\Error\ErrorInterface;
 use Core\Request\Request;
+use Core\Request\RequestInterface;
 use Core\Session\Session;
+use Core\Session\SessionInterface;
 use Core\Session\SessionManager;
 use Dotenv\Dotenv;
 
@@ -14,14 +18,17 @@ class Application
 
     public Router $router;
 
-    public Request $request;
+    public RequestInterface $request;
+
+    public SessionInterface $session;
+
+    public ErrorInterface $error;
 
     public static User $authUser;
 
     public function __construct($rootPath = '')
     {
         self::$ROOT_DIR = $rootPath;
-        $this->request = new Request();
         $this->router = new Router();
     }
 
@@ -31,6 +38,12 @@ class Application
 
         $this->startSession();
 
+        $this->loadRequestClass();
+
+        $this->loadErrorClass();
+
+        $this->loadHelpers();
+
         $this->getAuthenticatedUser();
 
         $this->router->reslove($this->request);
@@ -38,7 +51,7 @@ class Application
 
     protected function startSession()
     {
-        SessionManager::initialize();
+        $this->session = SessionManager::initialize();
     }
 
     protected function loadEnvironment()
@@ -53,6 +66,26 @@ class Application
             self::$authUser = User::where('id', Session::get('_user_id'))->first();
         } else {
             self::$authUser = new User();
+        }
+    }
+
+    protected function loadRequestClass()
+    {
+        $this->request = new Request();
+
+        $this->request->clearOldInputs();
+    }
+
+    protected function loadErrorClass()
+    {
+        $this->error = new Error();
+        $this->error->clear();
+    }
+
+    protected function loadHelpers()
+    {
+        foreach (glob(self::$ROOT_DIR . '/core/Helpers/*.php') as $filename) {
+            require_once $filename;
         }
     }
 }

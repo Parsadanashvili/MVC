@@ -86,4 +86,16 @@ class Request
     {
         return $this->server('REMOTE_ADDR');
     }
+
+    public function old(string $key, $default = null): mixed
+    {
+        if(Session::has('_old_inputs')) {
+            $oldInputs = Session::get('_old_inputs');
+            if(isset($oldInputs[$key])) {
+                return $oldInputs[$key];
+            }
+        }
+        
+        return $default;
+    }
 }
