@@ -2,6 +2,8 @@
 
 namespace Core\Session\Storage;
 
+use Core\Hash;
+
 abstract class AbstractSessionStorage implements SessionStorageInterface 
 {
     protected array $options = [];
@@ -33,6 +35,11 @@ abstract class AbstractSessionStorage implements SessionStorageInterface
         session_id($id);
     }
 
+    public function generateSessionId(): string
+    {
+        return uniqid();
+    }
+
     public function getSessionId(): string
     {
         return session_id();
@@ -62,6 +69,8 @@ abstract class AbstractSessionStorage implements SessionStorageInterface
     public function start()
     {
         $this->setSessionName($this->options['session_name']);
+
+        $this->setSessionId($this->generateSessionId());
 
         if(isset($this->options['domain'])) {
             $domain = $this->options['domain'];

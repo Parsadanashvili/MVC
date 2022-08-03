@@ -9,21 +9,25 @@ class SessionManager
     public static function initialize()
     {
         $factory = new SessionFactory();
-        return $factory->create('mvccore', SessionStorage::class, [
-            'session_name' => 'mvccore',
-            'lifetime' => 3600,
+        return $factory->create(self::getSessionName(), SessionStorage::class, [
+            'session_name' => self::getSessionName(),
+            'lifetime' => $_ENV['SESSION_LIFETIME'],
             'path' => '/',
             'domain' => '',
             'secure' => false,
             'httponly' => false,
             'use_cookies' => true,
-            'cookie_lifetime' => 3600,
+            'cookie_lifetime' => $_ENV['SESSION_LIFETIME'],
             'cookie_path' => '/',
             'cookie_secure' => false,
             'cookie_httponly' => false,
-            'gc_maxlifetime' => 3600,
+            'gc_maxlifetime' => $_ENV['SESSION_LIFETIME'],
             'gc_divisor' => 1,
             'gc_probability' => 1,
         ]);
+    }
+
+    protected static function getSessionName() {
+        return str_replace(' ', '_',strtolower($_ENV['APP_NAME']));
     }
 }
